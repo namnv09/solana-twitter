@@ -26,6 +26,27 @@ pub mod solana_twitter {
 
         Ok(())
     }
+
+    pub fn update_tweet(ctx: Context<UpdateTweet>, topic: String, content: String) -> ProgramResult {
+        let tweet: &mut Account<Tweet> = &mut ctx.accounts.tweet;
+
+        if topic.chars().count() > 50 {
+            return Err(ErrorCode::TopicTooLong.into())
+        }
+
+        if content.chars().count() > 280 {
+            return Err(ErrorCode::ContentTooLong.into())
+        }
+
+        tweet.topic = topic;
+        tweet.content = content;
+
+        Ok(())
+    }
+
+    pub fn delete_tweet(_ctx: Context<DeleteTweet>) -> ProgramResult {
+        Ok(())
+    }
 }
 
 #[derive(Accounts)]
@@ -36,6 +57,20 @@ pub struct SendTweet<'info> {
     pub author: Signer<'info>,
     #[account(address = system_program::ID)]
     pub system_program: AccountInfo<'info>,
+}
+
+#[derive(Accounts)]
+pub struct UpdateTweet<'info> {
+    #[account(mut, has_one = author)]
+    pub tweet: Account<'info, Tweet>,
+    pub author: Signer<'info>,
+}
+
+#[derive(Accounts)]
+pub struct DeleteTweet<'info> {
+    #[account(mut, has_one = author, close = author)]
+    pub tweet: Account<'info, Tweet>,
+    pub author: Signer<'info>,
 }
 
 #[account]
@@ -49,14 +84,10 @@ pub struct Tweet {
 const DISCRIMINATOR_LENGTH: usize = 8;
 const PUBLIC_KEY_LENGTH: usize = 32;
 const TIMESTAMP_LENGTH: usize = 8;
-
 const STRING_LENGTH_PREFIX: usize = 4; // Stores the size of the string.
 const MAX_TOPIC_LENGTH: usize = 50 * 4; // 50 chars max.
-
 const MAX_CONTENT_LENGTH: usize = 280 * 4; // 280 chars max.
 
-
-// 3. Add a constant on the Tweet account that provides its total size.
 impl Tweet {
     const LEN: usize = DISCRIMINATOR_LENGTH
         + PUBLIC_KEY_LENGTH // Author.
@@ -64,7 +95,6 @@ impl Tweet {
         + STRING_LENGTH_PREFIX + MAX_TOPIC_LENGTH // Topic.
         + STRING_LENGTH_PREFIX + MAX_CONTENT_LENGTH; // Content.
 }
-
 
 #[error]
 pub enum ErrorCode {

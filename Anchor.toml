@@ -2,10 +2,10 @@
 solana_twitter = "Dh9Rpyu653MgitFn5zhP7WNuHCXpMVjwGxT6VazUx1Jv"
 
 [programs.devnet]
-solana_twitter = "2BDbYV1ocs2S1PsYnd5c5mqtdLWGf5VbCYvf28rs9LGj"
+solana_twitter = "Dh9Rpyu653MgitFn5zhP7WNuHCXpMVjwGxT6VazUx1Jv"
 
 [programs.mainnet]
-solana_twitter = "2BDbYV1ocs2S1PsYnd5c5mqtdLWGf5VbCYvf28rs9LGj"
+solana_twitter = "Dh9Rpyu653MgitFn5zhP7WNuHCXpMVjwGxT6VazUx1Jv"
 
 [registry]
 url = "https://anchor.projectserum.com"
@@ -13,7 +13,7 @@ url = "https://anchor.projectserum.com"
 
 
 [provider]
-cluster = "devnet"
+cluster = "localnet"
 wallet = "/home/zznam/.config/solana/id.json"
 
 [scripts]
