@@ -1,5 +1,5 @@
 import { useWorkspace } from '@/composables'
-import { Tweet } from '@/models';
+import { Tweet } from '@/models'
 import bs58 from 'bs58'
 
 export const fetchTweets = async (filters = []) => {
